@@ -2,8 +2,25 @@
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map product="pwa" xml:lang="en-US">
     <title>Intershop Progressive Web App</title>
+    <topicref href="development-project.md" format="markdown"/>
+    <topicref href="development-tools.md" format="markdown"/>
     <topicref href="project-structure.md" format="markdown"/>
+    <topicref href="software-architecture.md" format="markdown"/>
+    <topicref href="style-guide.md" format="markdown"/>
+    <topicref href="localization.md" format="markdown"/>
     <topicref href="state-management.md" format="markdown"/>
+    <topicref href="forms.md" format="markdown"/>
+    <topicref href="styling-behavior.md" format="markdown"/>
+    <topicref href="code-documentation.md" format="markdown"/>
+    <topicref href="testing.md" format="markdown"/>
+    <topicref href="customizations.md" format="markdown"/>
+    <topicref href="third-party-integrations.md" format="markdown"/>
+    <topicref href="cms-integration.md" format="markdown"/>
+    <topicref href="configuration.md" format="markdown"/>
+    <topicref href="deployment-scenarios.md" format="markdown"/>
+    <topicref href="angular-universal.md" format="markdown"/>
+    <topicref href="continous-integration.md" format="markdown"/>
+    <topicref href="microsoft-azure-deployment.md" format="markdown"/>
     <topicref href="migrations.md" format="markdown"/>
     <topicref href="search-engine-optimization.md" format="markdown"/>
 </map>

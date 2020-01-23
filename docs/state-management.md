@@ -36,7 +36,7 @@ Facades are injectable instances which provide simplified access to the store vi
 
 The file structure looks like this:
 
-```
+```txt
 src/app/core
         ├─ facades
         |  └─ foobar.facade.ts
