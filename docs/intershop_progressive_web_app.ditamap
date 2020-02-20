@@ -17,7 +17,6 @@
     <topicref href="cms-integration.md" format="markdown"/>
     <topicref href="configuration.md" format="markdown"/>
     <topicref href="deployment-scenarios.md" format="markdown"/>
-    <topicref href="angular-universal.md" format="markdown"/>
     <topicref href="continous-integration.md" format="markdown"/>
     <topicref href="microsoft-azure-deployment.md" format="markdown"/>
     <topicref href="migrations.md" format="markdown"/>
