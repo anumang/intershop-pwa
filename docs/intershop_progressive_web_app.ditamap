@@ -6,7 +6,6 @@
     <topicref href="development-tools.md" format="markdown"/>
     <topicref href="project-structure.md" format="markdown"/>
     <topicref href="software-architecture.md" format="markdown"/>
-    <topicref href="style-guide.md" format="markdown"/>
     <topicref href="localization.md" format="markdown"/>
     <topicref href="state-management.md" format="markdown"/>
     <topicref href="forms.md" format="markdown"/>
