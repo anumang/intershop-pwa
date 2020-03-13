@@ -158,11 +158,10 @@ export class ActionCreatorsActionsMorpher {
 
             const argumentText = updateNewExpressionString(actionClass.getName(), argument);
             arrow.getFirstChildByKindOrThrow(SyntaxKind.NewExpression).replaceWithText(argumentText);
+            const arrowArgStrings = arrow.getParameters().length === 0 ? '' : arrow.getParameters()[0].getText();
 
             // ToDo: Multiple Parameters?
-            arrow
-              .getParentIfKind(SyntaxKind.CallExpression)
-              .addArgument(`${arrow.getParameters()[0].getText()} => ${argumentText}`);
+            arrow.getParentIfKind(SyntaxKind.CallExpression).addArgument(`(${arrowArgStrings}) => ${argumentText}`);
             arrow.getParentIfKind(SyntaxKind.CallExpression).removeArgument(arrow);
             i++;
           } else if (newExpression.getParent().getKind() === SyntaxKind.ArrayLiteralExpression) {
