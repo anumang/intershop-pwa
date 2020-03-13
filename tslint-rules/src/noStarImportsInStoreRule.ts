@@ -29,17 +29,6 @@ export class Rule extends Lint.Rules.AbstractRule {
       const importNodes = RuleHelpers.getAllStarImportNodes(importStatement.getSourceFile()).filter(node =>
         RuleHelpers.hasChildNodesWithText(node, importString)
       );
-      console.log('import nodes');
-      console.log(importNodes.map(n => n.getText()));
-      // replace all star import references
-      importNodes.forEach(node => {
-        const fix = new Lint.Replacement(
-          node.getStart(),
-          node.getWidth(),
-          node.getText().replace(`${importString}.`, '')
-        );
-        ctx.addFailureAtNode(node, 'star imports are banned', fix);
-      });
 
       // replace import itself
       const newImportStrings = importNodes
@@ -52,14 +41,22 @@ export class Rule extends Lint.Rules.AbstractRule {
         .reduce((acc, value) => acc.concat(value), [])
         .filter((node, index, array) => array.indexOf(node) === index);
 
-      console.log('new import string');
-      console.log(newImportStrings);
       const importFix = new Lint.Replacement(
         importStatement.getStart(),
         importStatement.getWidth(),
         `import {${newImportStrings.join(',')}} from ${importStatement.getChildAt(3).getText()}`
       );
       ctx.addFailureAtNode(importStatement, `Star imports in ngrx store files are banned.`, importFix);
+
+      // replace all star import references
+      importNodes.forEach(node => {
+        const fix = new Lint.Replacement(
+          node.getStart(),
+          node.getWidth(),
+          node.getText().replace(`${importString}.`, '')
+        );
+        ctx.addFailureAtNode(node, 'star imports are banned', fix);
+      });
     }
   }
 }
