@@ -5,15 +5,19 @@ import { Observable } from 'rxjs';
 import { LARGE_BREAKPOINT_WIDTH } from 'ish-core/configurations/injection-keys';
 
 import { WishlistsFacade } from '../../facades/wishlists.facade';
-import { Wishlist } from '../../models/wishlist/wishlist.model';
 
+/**
+ * The Wishlist Suggestion Component displays all unique items from all wish lists.
+ *
+ * @example
+ * <ish-wishlist-suggestion></ish-wishlist-suggestion>
+ */
 @Component({
   selector: 'ish-wishlist-suggestion',
   templateUrl: './wishlist-suggestion.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WishlistSuggestionComponent implements OnInit {
-  preferredWishlist$: Observable<Wishlist>;
   itemSkuFromAllWishlists$: Observable<string[]>;
   itemsPerSlide = 4;
   /**
@@ -41,7 +45,6 @@ export class WishlistSuggestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.preferredWishlist$ = this.wishlistsFacade.preferredWishlist$;
     this.itemSkuFromAllWishlists$ = this.wishlistsFacade.itemSkuFromAllWishlists$;
   }
 }
