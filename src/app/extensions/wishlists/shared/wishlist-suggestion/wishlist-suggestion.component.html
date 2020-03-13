@@ -1,12 +1,18 @@
 <div class="section">
   <h2>{{ 'account.wishlists.suggestions' | translate }}</h2>
   <ng-container *ngIf="preferredWishlist$ | async as wishlist">
-    <div class="product-list">
-      <swiper [config]="swiperConfig">
-        <div *ngFor="let item of wishlist.items" class="swiper-slide">
-          <ish-product-item [productSku]="item.sku"></ish-product-item>
-        </div>
-      </swiper>
-    </div>
+    <ng-container *ngIf="wishlist.itemsCount && wishlist.itemsCount > 0; else noItems" class="section">
+      <div class="product-list">
+        <swiper [config]="swiperConfig">
+          <div *ngFor="let item of wishlist.items" class="swiper-slide">
+            <ish-product-item [productSku]="item.sku"></ish-product-item>
+          </div>
+        </swiper>
+      </div>
+    </ng-container>
+    <ng-template #noItems>
+      <p>{{ 'account.wishlists.no_items' | translate }}</p>
+    </ng-template>
   </ng-container>
+  <a routerLink="/account/wishlists">{{ 'account.overview.wishlist.view_all' | translate }}</a>
 </div>
