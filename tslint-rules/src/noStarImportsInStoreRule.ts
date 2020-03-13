@@ -27,7 +27,7 @@ export class Rule extends Lint.Rules.AbstractRule {
         .getText();
       // get all Nodes that use the star import
       const importNodes = RuleHelpers.getAllStarImportNodes(importStatement.getSourceFile()).filter(node =>
-        RuleHelpers.hasDirectDescendantNodesWithText(node, importString)
+        RuleHelpers.hasChildNodesWithText(node, importString)
       );
       console.log('import nodes');
       console.log(importNodes.map(n => n.getText()));

@@ -42,7 +42,7 @@ var Rule = (function (_super) {
                 .getChildAt(2)
                 .getText();
             var importNodes = ruleHelpers_1.RuleHelpers.getAllStarImportNodes(importStatement.getSourceFile()).filter(function (node) {
-                return ruleHelpers_1.RuleHelpers.hasDirectDescendantNodesWithText(node, importString_1);
+                return ruleHelpers_1.RuleHelpers.hasChildNodesWithText(node, importString_1);
             });
             console.log('import nodes');
             console.log(importNodes.map(function (n) { return n.getText(); }));

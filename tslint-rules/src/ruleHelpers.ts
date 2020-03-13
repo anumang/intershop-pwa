@@ -67,14 +67,8 @@ export class RuleHelpers {
     );
   }
 
-  static hasDirectDescendantNodesWithText(node: ts.Node, text: string): boolean {
-    return (
-      RuleHelpers.filterTreeByCondition(
-        node,
-        n => n.getText() === text,
-        n => n.kind !== ts.SyntaxKind.PropertyAccessExpression && n.kind !== ts.SyntaxKind.Identifier
-      ).length > 0
-    );
+  static hasChildNodesWithText(node: ts.Node, text: string): boolean {
+    return node.getChildren().filter(child => child.getText() === text).length > 0;
   }
 
   /**
@@ -82,24 +76,15 @@ export class RuleHelpers {
    * @param node node whose subtree should be filtered
    * @param callBack filtering condition
    */
-  private static filterTreeByCondition(
-    node: ts.Node,
-    callBack: (n: ts.Node) => boolean,
-    cancel: (n: ts.Node) => boolean = _ => false
-  ): ts.Node[] {
+  private static filterTreeByCondition(node: ts.Node, callBack: (n: ts.Node) => boolean): ts.Node[] {
     const nodesList: ts.Node[] = [];
-    // stop subtree search if cancel condition is met
-    if (cancel(node)) {
-      return nodesList;
-    }
     // add node to list if it matches kind
     if (callBack(node)) {
       nodesList.push(node);
-      return nodesList;
     }
     // recursively filter all children
     node.getChildren().forEach(c => {
-      RuleHelpers.filterTreeByCondition(c, callBack, cancel).forEach(e => nodesList.push(e));
+      RuleHelpers.filterTreeByCondition(c, callBack).forEach(e => nodesList.push(e));
     });
     return nodesList;
   }
