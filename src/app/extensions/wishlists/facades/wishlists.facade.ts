@@ -16,6 +16,7 @@ import {
   getAllWishlists,
   getPreferredWishlist,
   getSelectedWishlistDetails,
+  getSkuFromAllWishlistItems,
   getWishlistsError,
   getWishlistsLoading,
 } from '../store/wishlist';
@@ -28,6 +29,7 @@ export class WishlistsFacade {
   wishlists$: Observable<Wishlist[]> = this.store.pipe(select(getAllWishlists));
   currentWishlist$: Observable<Wishlist> = this.store.pipe(select(getSelectedWishlistDetails));
   preferredWishlist$: Observable<Wishlist> = this.store.pipe(select(getPreferredWishlist));
+  itemSkuFromAllWishlists$: Observable<string[]> = this.store.pipe(select(getSkuFromAllWishlistItems));
   wishlistLoading$: Observable<boolean> = this.store.pipe(select(getWishlistsLoading));
   wishlistError$: Observable<HttpError> = this.store.pipe(select(getWishlistsError));
 

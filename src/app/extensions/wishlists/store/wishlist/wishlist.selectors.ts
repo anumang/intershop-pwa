@@ -38,3 +38,11 @@ export const getPreferredWishlist = createSelector(
   getAllWishlists,
   entities => entities.find(e => e.preferred)
 );
+
+export const getSkuFromAllWishlistItems = createSelector(
+  getAllWishlists,
+  (entities): string[] => {
+    const arrayOfArrays = entities.map(e => e.items.map(items => items.sku));
+    return [...new Set([].concat(...arrayOfArrays))];
+  }
+);

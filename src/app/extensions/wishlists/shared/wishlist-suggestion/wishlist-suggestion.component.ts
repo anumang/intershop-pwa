@@ -14,6 +14,7 @@ import { Wishlist } from '../../models/wishlist/wishlist.model';
 })
 export class WishlistSuggestionComponent implements OnInit {
   preferredWishlist$: Observable<Wishlist>;
+  itemSkuFromAllWishlists$: Observable<string[]>;
   itemsPerSlide = 4;
   /**
    * configuration of swiper carousel
@@ -41,5 +42,6 @@ export class WishlistSuggestionComponent implements OnInit {
 
   ngOnInit() {
     this.preferredWishlist$ = this.wishlistsFacade.preferredWishlist$;
+    this.itemSkuFromAllWishlists$ = this.wishlistsFacade.itemSkuFromAllWishlists$;
   }
 }

@@ -1,11 +1,11 @@
 <div class="section">
   <h2>{{ 'account.wishlists.suggestions' | translate }}</h2>
-  <ng-container *ngIf="preferredWishlist$ | async as wishlist">
-    <ng-container *ngIf="wishlist.itemsCount && wishlist.itemsCount > 0; else noItems" class="section">
+  <ng-container *ngIf="itemSkuFromAllWishlists$ | async as itemSku">
+    <ng-container *ngIf="itemSku.length > 0; else noItems" class="section">
       <div class="product-list">
         <swiper [config]="swiperConfig">
-          <div *ngFor="let item of wishlist.items" class="swiper-slide">
-            <ish-product-item [productSku]="item.sku"></ish-product-item>
+          <div *ngFor="let sku of itemSku" class="swiper-slide">
+            <ish-product-item [productSku]="sku"></ish-product-item>
           </div>
         </swiper>
       </div>
