@@ -61,17 +61,21 @@ var RuleHelpers = (function () {
     RuleHelpers.getAllStarImportNodes = function (sourceFile) {
         return RuleHelpers.filterTreeByCondition(sourceFile, function (node) { return node.kind === ts.SyntaxKind.PropertyAccessExpression || node.kind === ts.SyntaxKind.QualifiedName; });
     };
-    RuleHelpers.hasChildrenNodesWithText = function (node, text) {
-        return RuleHelpers.filterTreeByCondition(node, function (n) { return n.getText() === text; }).length > 0;
+    RuleHelpers.hasDirectDescendantNodesWithText = function (node, text) {
+        return (RuleHelpers.filterTreeByCondition(node, function (n) { return n.getText() === text; }, function (n) { return n.kind !== ts.SyntaxKind.PropertyAccessExpression && n.kind !== ts.SyntaxKind.Identifier; }).length > 0);
     };
-    RuleHelpers.filterTreeByCondition = function (node, callBack) {
+    RuleHelpers.filterTreeByCondition = function (node, callBack, cancel) {
+        if (cancel === void 0) { cancel = function (_) { return false; }; }
         var nodesList = [];
+        if (cancel(node)) {
+            return nodesList;
+        }
         if (callBack(node)) {
             nodesList.push(node);
             return nodesList;
         }
         node.getChildren().forEach(function (c) {
-            RuleHelpers.filterTreeByCondition(c, callBack).forEach(function (e) { return nodesList.push(e); });
+            RuleHelpers.filterTreeByCondition(c, callBack, cancel).forEach(function (e) { return nodesList.push(e); });
         });
         return nodesList;
     };

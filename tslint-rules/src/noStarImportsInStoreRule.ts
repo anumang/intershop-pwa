@@ -27,8 +27,10 @@ export class Rule extends Lint.Rules.AbstractRule {
         .getText();
       // get all Nodes that use the star import
       const importNodes = RuleHelpers.getAllStarImportNodes(importStatement.getSourceFile()).filter(node =>
-        RuleHelpers.hasChildrenNodesWithText(node, importString)
+        RuleHelpers.hasDirectDescendantNodesWithText(node, importString)
       );
+      console.log('import nodes');
+      console.log(importNodes.map(n => n.getText()));
       // replace all star import references
       importNodes.forEach(node => {
         const fix = new Lint.Replacement(
@@ -40,13 +42,18 @@ export class Rule extends Lint.Rules.AbstractRule {
       });
 
       // replace import itself
-      const newImportStrings = importNodes.map(
-        node =>
+      const newImportStrings = importNodes
+        .map(node =>
           node
             .getText()
             .replace(`${importString}.`, '')
-            .split('.')[0]
-      );
+            .split('.')
+        )
+        .reduce((acc, value) => acc.concat(value), [])
+        .filter((node, index, array) => array.indexOf(node) === index);
+
+      console.log('new import string');
+      console.log(newImportStrings);
       const importFix = new Lint.Replacement(
         importStatement.getStart(),
         importStatement.getWidth(),
