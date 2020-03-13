@@ -3,6 +3,7 @@ import { FormlyFieldConfig } from '@ngx-formly/core';
 import { PaymentInstrumentData } from 'ish-core/models/payment-instrument/payment-instrument.interface';
 import { PriceMapper } from 'ish-core/models/price/price.mapper';
 
+import { HostedPaymentPageParametersMapper } from './hosted-payment-page-parameters.mapper';
 import {
   PaymentMethodBaseData,
   PaymentMethodData,
@@ -41,7 +42,7 @@ export class PaymentMethodMapper {
             ? data.paymentInstruments.map(id => included.paymentInstruments[id])
             : undefined,
         parameters: data.parameterDefinitions ? PaymentMethodMapper.mapParameter(data.parameterDefinitions) : undefined,
-        hostedPaymentPageParameters: data.hostedPaymentPageParameters,
+        hostedPaymentPageParameters: HostedPaymentPageParametersMapper.fromData(data.hostedPaymentPageParameters),
       }));
   }
 
