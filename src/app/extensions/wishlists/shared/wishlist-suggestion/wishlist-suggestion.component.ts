@@ -3,6 +3,7 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { Observable } from 'rxjs';
 
 import { LARGE_BREAKPOINT_WIDTH } from 'ish-core/configurations/injection-keys';
+import { DEFAULT_CONFIGURATION } from 'ish-shared/components/product/product-item/product-item.component';
 import { ProductRowComponentConfiguration } from 'ish-shared/components/product/product-row/product-row.component';
 import { ProductTileComponentConfiguration } from 'ish-shared/components/product/product-tile/product-tile.component';
 
@@ -35,23 +36,10 @@ export class WishlistSuggestionComponent implements OnInit {
 
   constructor(private wishlistsFacade: WishlistsFacade, @Inject(LARGE_BREAKPOINT_WIDTH) largeBreakpointWidth: number) {
     this.tileConfiguration = {
-      readOnly: false,
-      allowZeroQuantity: false,
-      quantityLabel: ' ',
-      displayName: true,
-      displayDescription: true,
-      displaySKU: true,
-      displayInventory: true,
-      displayQuantity: true,
-      displayPrice: true,
-      displayPromotions: true,
-      displayVariations: true,
-      displayShipment: false,
-      displayAddToBasket: true,
+      ...DEFAULT_CONFIGURATION,
       displayAddToWishlist: false,
       displayAddToCompare: false,
       displayAddToQuote: false,
-      displayType: 'tile',
     };
 
     this.swiperConfig = {

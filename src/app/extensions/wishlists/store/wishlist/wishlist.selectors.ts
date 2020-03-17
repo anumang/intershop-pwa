@@ -39,10 +39,11 @@ export const getPreferredWishlist = createSelector(
   entities => entities.find(e => e.preferred)
 );
 
+/**
+ * Gets all unique items from all wishlists
+ * Returns an array of SKU strings
+ */
 export const getSkuFromAllWishlistItems = createSelector(
   getAllWishlists,
-  (entities): string[] => {
-    const arrayOfArrays = entities.map(e => e.items.map(items => items.sku));
-    return [...new Set([].concat(...arrayOfArrays))];
-  }
+  (entities): string[] => [...new Set([].concat(...entities.map(e => e.items.map(items => items.sku))))]
 );
