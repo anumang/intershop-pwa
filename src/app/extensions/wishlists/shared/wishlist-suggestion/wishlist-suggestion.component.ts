@@ -3,8 +3,13 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { Observable } from 'rxjs';
 
 import { LARGE_BREAKPOINT_WIDTH } from 'ish-core/configurations/injection-keys';
+import { ProductRowComponentConfiguration } from 'ish-shared/components/product/product-row/product-row.component';
+import { ProductTileComponentConfiguration } from 'ish-shared/components/product/product-tile/product-tile.component';
 
 import { WishlistsFacade } from '../../facades/wishlists.facade';
+
+declare type ProductItemContainerConfiguration = ProductTileComponentConfiguration &
+  ProductRowComponentConfiguration & { displayType: 'tile' | 'row' };
 
 /**
  * The Wishlist Suggestion Component displays all unique items from all wish lists.
@@ -26,7 +31,29 @@ export class WishlistSuggestionComponent implements OnInit {
    */
   swiperConfig: SwiperConfigInterface;
 
+  tileConfiguration: ProductItemContainerConfiguration;
+
   constructor(private wishlistsFacade: WishlistsFacade, @Inject(LARGE_BREAKPOINT_WIDTH) largeBreakpointWidth: number) {
+    this.tileConfiguration = {
+      readOnly: false,
+      allowZeroQuantity: false,
+      quantityLabel: ' ',
+      displayName: true,
+      displayDescription: true,
+      displaySKU: true,
+      displayInventory: true,
+      displayQuantity: true,
+      displayPrice: true,
+      displayPromotions: true,
+      displayVariations: true,
+      displayShipment: false,
+      displayAddToBasket: true,
+      displayAddToWishlist: false,
+      displayAddToCompare: false,
+      displayAddToQuote: false,
+      displayType: 'tile',
+    };
+
     this.swiperConfig = {
       breakpoints: {
         [largeBreakpointWidth]: {
