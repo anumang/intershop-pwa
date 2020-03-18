@@ -264,9 +264,9 @@
           "message": "Most likely you would've wanted to import the model instead."
         },
         {
-          "import": "ROUTER_NAVIGATION_TYPE",
+          "import": ".*",
           "from": "ngrx-router",
-          "message": "Don't use ROUTER_NAVIGATION_TYPE, try to do it with ofRoute() in effects and new RouteNavigation in specs."
+          "message": "Don't use ngrx-router, try to do it with @ngrx/router-store."
         },
         {
           "from": "^[\\./]*/core/(.*)$",
