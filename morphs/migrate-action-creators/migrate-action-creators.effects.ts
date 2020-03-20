@@ -49,9 +49,9 @@ export class ActionCreatorsEffectMorpher {
    */
   private updateOfType(pipe: CallExpression): CallExpression {
     pipe
-      // get piped functions
-      .getChildrenOfKind(SyntaxKind.CallExpression)
-      .filter(exp => exp.getFirstChildByKind(SyntaxKind.Identifier).getText() === 'ofType')
+      // get piped functions and their descendants
+      .getDescendantsOfKind(SyntaxKind.CallExpression)
+      .filter(exp => exp.getExpression().getText() === 'ofType')
       .forEach(exp => {
         if (exp) {
           // remove Type Argument and update actionType
