@@ -104,6 +104,12 @@ export class ActionCreatorsReducerMorpher {
     this.switchStatements = [];
     let previousIdentifiers: string[] = [];
 
+    if (
+      this.reducerFile.getFunction(`${this.parent.storeName}Reducer`).getDescendantsOfKind(SyntaxKind.SwitchStatement)
+        .length === 0
+    ) {
+      throw new Error('this reducer does not include a switch statement. Please migrate manually');
+    }
     // iterate over reducer switch cases and store info
     this.reducerFile
       .getFunction(`${this.parent.storeName}Reducer`)
