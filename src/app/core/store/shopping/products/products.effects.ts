@@ -32,6 +32,7 @@ import { LoadCategory } from 'ish-core/store/shopping/categories';
 import { SetProductListingPages } from 'ish-core/store/shopping/product-listing';
 import { HttpStatusCodeService } from 'ish-core/utils/http-status-code/http-status-code.service';
 import {
+  distinctCompareWith,
   mapErrorToAction,
   mapToPayload,
   mapToPayloadProperty,
@@ -199,6 +200,7 @@ export class ProductsEffects {
   @Effect()
   routeListenerForSelectingProducts$ = this.store.pipe(
     select(selectRouteParam('sku')),
+    distinctCompareWith(this.store.pipe(select(productsSelectors.getSelectedProductId))),
     map(sku => new productsActions.SelectProduct({ sku }))
   );
 
