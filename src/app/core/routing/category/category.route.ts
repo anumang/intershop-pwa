@@ -55,7 +55,7 @@ export function generateCategoryUrl(category: CategoryView): string {
   return route;
 }
 
-export function ofCategoryRoute(): OperatorFunction<{}, { sku: string; categoryUniqueId: string }> {
+export function ofCategoryRoute(): OperatorFunction<{}, { categoryUniqueId: string }> {
   return source$ =>
     source$.pipe(
       map((state: CoreState) => ({
@@ -63,6 +63,7 @@ export function ofCategoryRoute(): OperatorFunction<{}, { sku: string; categoryU
         categoryUniqueId: selectRouteParam('categoryUniqueId')(state),
       })),
       distinctUntilChanged(isEqual),
-      filter(({ sku, categoryUniqueId }) => categoryUniqueId && !sku)
+      filter(({ sku, categoryUniqueId }) => categoryUniqueId && !sku),
+      map(({ categoryUniqueId }) => ({ categoryUniqueId }))
     );
 }
