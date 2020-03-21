@@ -6,7 +6,6 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, Store, combineReducers } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { cold, hot } from 'jest-marbles';
-import { RouteNavigation } from 'ngrx-router';
 import { Observable, noop, of, throwError } from 'rxjs';
 import { anyString, anything, instance, mock, verify, when } from 'ts-mockito';
 

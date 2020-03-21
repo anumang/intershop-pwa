@@ -3,7 +3,6 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Dictionary } from '@ngrx/entity';
 import { Store, select } from '@ngrx/store';
-import { mapToParam, ofRoute } from 'ngrx-router';
 import { identity } from 'rxjs';
 import {
   concatMap,
@@ -17,7 +16,6 @@ import {
   switchMap,
   switchMapTo,
   take,
-  takeUntil,
   tap,
   throttleTime,
   withLatestFrom,
@@ -29,6 +27,7 @@ import { VariationProduct } from 'ish-core/models/product/product-variation.mode
 import { Product, ProductCompletenessLevel, ProductHelper } from 'ish-core/models/product/product.model';
 import { ofProductRoute } from 'ish-core/routing/product/product.route';
 import { ProductsService } from 'ish-core/services/products/products.service';
+import { selectRouteParam } from 'ish-core/store/router';
 import { LoadCategory } from 'ish-core/store/shopping/categories';
 import { SetProductListingPages } from 'ish-core/store/shopping/product-listing';
 import { HttpStatusCodeService } from 'ish-core/utils/http-status-code/http-status-code.service';
@@ -198,12 +197,9 @@ export class ProductsEffects {
   );
 
   @Effect()
-  routeListenerForSelectingProducts$ = this.actions$.pipe(
-    ofRoute(),
-    mapToParam<string>('sku'),
-    withLatestFrom(this.store.pipe(select(productsSelectors.getSelectedProductId))),
-    filter(([fromAction, fromStore]) => fromAction !== fromStore),
-    map(([sku]) => new productsActions.SelectProduct({ sku }))
+  routeListenerForSelectingProducts$ = this.store.pipe(
+    select(selectRouteParam('sku')),
+    map(sku => new productsActions.SelectProduct({ sku }))
   );
 
   /**
@@ -221,7 +217,7 @@ export class ProductsEffects {
   @Effect()
   loadDefaultCategoryContextForProduct$ = this.actions$.pipe(
     ofProductRoute(),
-    mapToParam('categoryUniqueId'),
+    mapToProperty('categoryUniqueId'),
     whenFalsy(),
     switchMap(() =>
       this.store.pipe(
@@ -233,7 +229,7 @@ export class ProductsEffects {
         whenTruthy(),
         distinctUntilChanged(),
         map(categoryId => new LoadCategory({ categoryId })),
-        takeUntil(this.actions$.pipe(ofRoute()))
+        take(1)
       )
     )
   );

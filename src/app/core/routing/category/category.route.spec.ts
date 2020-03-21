@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { Router, UrlMatchResult, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { cold } from 'jest-marbles';
-import { RouteNavigation } from 'ngrx-router';
 import { of } from 'rxjs';
 
 import { createCategoryView } from 'ish-core/models/category-view/category-view.model';

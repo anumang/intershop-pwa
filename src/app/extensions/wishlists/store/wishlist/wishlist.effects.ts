@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Store, select } from '@ngrx/store';
-import { mapToParam, ofRoute } from 'ngrx-router';
 import { filter, map, mapTo, mergeMap, switchMap, switchMapTo, withLatestFrom } from 'rxjs/operators';
 
 import { SuccessMessage } from 'ish-core/store/messages';
+import { selectRouteParam } from 'ish-core/store/router';
 import { UserActionTypes, getUserAuthorized } from 'ish-core/store/user';
 import { SetBreadcrumbData } from 'ish-core/store/viewconf';
 import { mapErrorToAction, mapToPayload, mapToPayloadProperty, whenTruthy } from 'ish-core/utils/operators';
@@ -13,7 +13,7 @@ import { Wishlist, WishlistHeader } from '../../models/wishlist/wishlist.model';
 import { WishlistService } from '../../services/wishlist/wishlist.service';
 
 import * as wishlistsActions from './wishlist.actions';
-import { getSelectedWishlistDetails, getSelectedWishlistId, getWishlistDetails } from './wishlist.selectors';
+import { getSelectedWishlistDetails, getWishlistDetails } from './wishlist.selectors';
 
 @Injectable()
 export class WishlistEffects {
@@ -169,12 +169,9 @@ export class WishlistEffects {
   );
 
   @Effect()
-  routeListenerForSelectedWishlist$ = this.actions$.pipe(
-    ofRoute(),
-    mapToParam<string>('wishlistName'),
-    withLatestFrom(this.store.pipe(select(getSelectedWishlistId))),
-    filter(([routerId, storeId]) => routerId !== storeId),
-    map(([id]) => new wishlistsActions.SelectWishlist({ id }))
+  routeListenerForSelectedWishlist$ = this.store.pipe(
+    select(selectRouteParam('wishlistName')),
+    map(id => new wishlistsActions.SelectWishlist({ id }))
   );
 
   /**
@@ -199,8 +196,8 @@ export class WishlistEffects {
 
   @Effect()
   setWishlistBreadcrumb$ = this.actions$.pipe(
-    ofRoute(),
-    mapToParam('wishlistName'),
+    ofType<wishlistsActions.SelectWishlist>(wishlistsActions.WishlistsActionTypes.SelectWishlist),
+    mapToPayloadProperty('id'),
     whenTruthy(),
     switchMapTo(this.store.pipe(select(getSelectedWishlistDetails))),
     whenTruthy(),

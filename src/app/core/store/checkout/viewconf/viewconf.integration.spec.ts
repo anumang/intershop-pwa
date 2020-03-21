@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { combineReducers } from '@ngrx/store';
-import { RouteNavigation } from 'ngrx-router';
 
 import { checkoutReducers } from 'ish-core/store/checkout/checkout-store.module';
 import { TestStore, ngrxTesting } from 'ish-core/utils/dev/ngrx-testing';

@@ -6,7 +6,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, Store, combineReducers } from '@ngrx/store';
 import { cold, hot } from 'jest-marbles';
-import { RouteNavigation } from 'ngrx-router';
 import { Observable, noop, of, throwError } from 'rxjs';
 import { toArray } from 'rxjs/operators';
 import { anyNumber, anyString, anything, instance, mock, resetCalls, spy, verify, when } from 'ts-mockito';

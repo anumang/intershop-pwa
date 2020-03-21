@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Store, combineReducers } from '@ngrx/store';
 import { cold, hot } from 'jest-marbles';
-import { RouteNavigation } from 'ngrx-router';
 import { of, throwError } from 'rxjs';
 import { anyNumber, anyString, anything, instance, mock, verify, when } from 'ts-mockito';
 
@@ -545,11 +544,10 @@ describe('Wishlist Effects', () => {
   describe('setWishlistBreadcrumb$', () => {
     beforeEach(() => {
       store$.dispatch(new LoadWishlistsSuccess({ wishlists }));
-      store$.dispatch(new SelectWishlist({ id: wishlists[0].id }));
     });
 
     it('should set the breadcrumb of the selected wishlist', done => {
-      actions$ = of(new RouteNavigation({ path: 'any', params: { wishlistName: wishlists[0].id } }));
+      actions$ = of(new SelectWishlist({ id: wishlists[0].id }));
       effects.setWishlistBreadcrumb$.subscribe(action => {
         expect(action.payload).toMatchInlineSnapshot(`
           Object {

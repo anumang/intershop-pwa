@@ -188,6 +188,7 @@ describe('Shopping Store', () => {
             shopping: combineReducers(shoppingReducers),
           },
           effects: [...coreEffects, ...shoppingEffects],
+          router: true,
         }),
       ],
       providers: [

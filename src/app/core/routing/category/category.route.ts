@@ -1,9 +1,11 @@
 import { UrlMatchResult, UrlSegment } from '@angular/router';
-import { RouteNavigation, ofRoute } from 'ngrx-router';
-import { MonoTypeOperatorFunction } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { isEqual } from 'lodash-es';
+import { OperatorFunction } from 'rxjs';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 
 import { CategoryView } from 'ish-core/models/category-view/category-view.model';
+import { CoreState } from 'ish-core/store/core-store';
+import { selectRouteParam } from 'ish-core/store/router';
 
 export function generateLocalizedCategorySlug(category: CategoryView) {
   if (!category || !category.categoryPath.length) {
@@ -53,10 +55,14 @@ export function generateCategoryUrl(category: CategoryView): string {
   return route;
 }
 
-export function ofCategoryRoute(): MonoTypeOperatorFunction<RouteNavigation> {
+export function ofCategoryRoute(): OperatorFunction<{}, { sku: string; categoryUniqueId: string }> {
   return source$ =>
     source$.pipe(
-      ofRoute(),
-      filter(action => action.payload.params && action.payload.params.categoryUniqueId && !action.payload.params.sku)
+      map((state: CoreState) => ({
+        sku: selectRouteParam('sku')(state),
+        categoryUniqueId: selectRouteParam('categoryUniqueId')(state),
+      })),
+      distinctUntilChanged(isEqual),
+      filter(({ sku, categoryUniqueId }) => categoryUniqueId && !sku)
     );
 }
