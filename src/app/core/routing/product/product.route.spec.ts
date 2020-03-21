@@ -1,14 +1,15 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router, UrlMatchResult, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { cold } from 'jest-marbles';
-import { of } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { createCategoryView } from 'ish-core/models/category-view/category-view.model';
 import { Category } from 'ish-core/models/category/category.model';
 import { createProductView } from 'ish-core/models/product-view/product-view.model';
 import { VariationProduct } from 'ish-core/models/product/product-variation.model';
 import { Product } from 'ish-core/models/product/product.model';
+import { ngrxTesting } from 'ish-core/utils/dev/ngrx-testing';
 import { categoryTree } from 'ish-core/utils/dev/test-data-utils';
 
 import { generateProductUrl, matchProductRoute, ofProductRoute } from './product.route';
@@ -314,28 +315,63 @@ describe('Product Route', () => {
       `);
     });
   });
+});
 
-  describe('ofProductRoute', () => {
-    it('should detect product route when sku is a param', () => {
-      const stream$ = of(new RouteNavigation({ path: 'any', params: { sku: '123' } }));
+describe('Product Route', () => {
+  let router: Router;
+  let store$: Store<{}>;
 
-      expect(stream$.pipe(ofProductRoute())).toBeObservable(
-        cold('(a|)', {
-          a: new RouteNavigation({
-            params: {
-              sku: '123',
-            },
-            path: 'any',
-            url: '/any',
-          }),
-        })
-      );
+  beforeEach(() => {
+    @Component({ template: 'dummy' })
+    class DummyComponent {}
+
+    TestBed.configureTestingModule({
+      declarations: [DummyComponent],
+      imports: [
+        RouterTestingModule.withRoutes([{ path: '**', component: DummyComponent }]),
+        ngrxTesting({ router: true }),
+      ],
     });
 
-    it('should not detect product route when sku is missing', () => {
-      const stream$ = of(new RouteNavigation({ path: 'any' }));
+    router = TestBed.get(Router);
+    store$ = TestBed.get(Store);
+  });
 
-      expect(stream$.pipe(ofProductRoute())).toBeObservable(cold('|'));
+  describe('ofProductRoute', () => {
+    it('should detect product route when sku is a param', done => {
+      router.navigateByUrl('/product;sku=123');
+
+      store$.pipe(ofProductRoute()).subscribe(data => {
+        expect(data).toMatchInlineSnapshot(`
+          Object {
+            "categoryUniqueId": undefined,
+            "sku": "123",
+          }
+        `);
+        done();
+      });
+    });
+
+    it('should detect product route when sku and categoryUniqueId are params', done => {
+      router.navigateByUrl('/product;sku=123;categoryUniqueId=ABC');
+
+      store$.pipe(ofProductRoute()).subscribe(data => {
+        expect(data).toMatchInlineSnapshot(`
+          Object {
+            "categoryUniqueId": "ABC",
+            "sku": "123",
+          }
+        `);
+        done();
+      });
+    });
+
+    it('should not detect product route when sku is missing', done => {
+      router.navigateByUrl('/other');
+
+      store$.pipe(ofProductRoute()).subscribe(fail, fail, fail);
+
+      setTimeout(done, 1000);
     });
   });
 });
