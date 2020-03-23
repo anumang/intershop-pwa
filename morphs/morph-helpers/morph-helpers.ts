@@ -1,4 +1,4 @@
-import { SourceFile } from 'ts-morph';
+import { ConditionalExpression, Expression, SourceFile } from 'ts-morph';
 
 /**
  * helper: construct on()-arguments from case identifier and possible preceding empty case identifiers
@@ -51,4 +51,11 @@ export function checkForNamespaceImports(sourceFile: SourceFile) {
       throw new Error('please ensure your store files include no star imports');
     }
   });
+}
+
+/**
+ * returns expression from conditional as array
+ */
+export function getConditionalWhenExpressions(conditional: ConditionalExpression): Expression[] {
+  return [conditional.getWhenTrue(), conditional.getWhenFalse()];
 }

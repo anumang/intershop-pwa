@@ -7,10 +7,15 @@ import {
   VariableDeclarationKind,
 } from 'ts-morph';
 
-import { checkForNamespaceImports, updateNewExpressionString } from '../morph-helpers/morph-helpers';
+import {
+  checkForNamespaceImports,
+  getConditionalWhenExpressions,
+  updateNewExpressionString,
+} from '../morph-helpers/morph-helpers';
 
 import { ActionCreatorsMorpher } from './migrate-action-creators';
 
+// tslint:disable:no-console
 export class ActionCreatorsActionsMorpher {
   constructor(public actionsFile: SourceFile, public parent: ActionCreatorsMorpher) {}
   actionTypes: { [typeName: string]: string };
@@ -172,10 +177,15 @@ export class ActionCreatorsActionsMorpher {
           } else if (newExpression.getParent().getKind() === SyntaxKind.ReturnStatement) {
             const returnStmt = newExpression.getParentIfKindOrThrow(SyntaxKind.ReturnStatement);
             const parentBlock = returnStmt.getParentIfKindOrThrow(SyntaxKind.Block);
-            const pos = returnStmt.getPos();
             const newReturn = `return ${updateNewExpressionString(actionClass.getName(), argument)}`;
             returnStmt.remove();
             parentBlock.addStatements(newReturn);
+            i++;
+          } else if (newExpression.getParent().getKind() === SyntaxKind.ConditionalExpression) {
+            const condExp = newExpression.getParentIfKindOrThrow(SyntaxKind.ConditionalExpression);
+            getConditionalWhenExpressions(condExp)
+              .filter(exp => exp.getPos() === newExpression.getPos())
+              .forEach(exp => exp.replaceWithText(updateNewExpressionString(actionClass.getName(), argument)));
             i++;
           }
         } else if (
